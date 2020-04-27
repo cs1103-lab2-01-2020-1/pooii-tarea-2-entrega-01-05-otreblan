@@ -16,4 +16,8 @@ jobs:
             - name: mkdir build
               run: mkdir -p build
             - name: build
-              run: cd build && cmake .. && make -j$(nproc)
+              run: cd build &&
+                  cmake
+                    -DCMAKE_CXX_COMPILER=g++9
+                  .. &&
+                  make -j$(nproc)
