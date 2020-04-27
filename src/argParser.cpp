@@ -33,7 +33,7 @@ void aru::ArgParser::usage()
 		"Tarea 3\n"
 		"Modo de uso: tarea-3 [OPCIONES]\n"
 		"\t-h, --help                 Muestra esta ayuda\n"
-		"\t-t, --track=ORDEN          Trackea una orden\n"
+		"\t-t, --track=USER           Trackea las órdenes de un usuario\n"
 		"\t-l, --list                 Muestra las órdenes\n"
 		"\t-d, --destination=DESTINO  Destino de la orden\n"
 	;
