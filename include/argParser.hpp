@@ -16,12 +16,19 @@
 
 #pragma once
 
+#include <getopt.h>
+#include <vector>
+
 namespace aru
 {
 
 class ArgParser
 {
+private:
 	void usage();
+
+	static const std::vector<option> options;
+
 public:
 	ArgParser();
 	virtual ~ArgParser();
