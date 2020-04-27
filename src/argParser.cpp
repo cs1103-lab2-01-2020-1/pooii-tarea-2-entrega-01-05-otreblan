@@ -14,14 +14,30 @@
 // You should have received a copy of the GNU General Public License
 // along with tarea-3.  If not, see <http://www.gnu.org/licenses/>.
 
-#include <iostream>
 #include <argParser.hpp>
+#include <string>
+#include <iostream>
 
-int main(int argc, char* argv[])
+void aru::ArgParser::usage()
 {
-	aru::ArgParser parser;
+	std::cout
+		<< "Tarea 3\n"
+		<< "Modo de uso: tarea-3 [OPCIONES]\n"
+		<< "--help      Muestra esta ayuda\n"
+		;
+}
 
-	parser.parse(argc, argv);
+aru::ArgParser::ArgParser(){};
 
-	return EXIT_SUCCESS;
+aru::ArgParser::~ArgParser(){};
+
+bool aru::ArgParser::parse(int argc, char* argv[])
+{
+	using namespace std::literals;
+
+	if("--help"s == argv[argc-1])
+	{
+		usage();
+	}
+	return true;
 }

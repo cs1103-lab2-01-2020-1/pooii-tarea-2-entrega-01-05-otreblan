@@ -14,14 +14,19 @@
 // You should have received a copy of the GNU General Public License
 // along with tarea-3.  If not, see <http://www.gnu.org/licenses/>.
 
-#include <iostream>
-#include <argParser.hpp>
+#pragma once
 
-int main(int argc, char* argv[])
+namespace aru
 {
-	aru::ArgParser parser;
 
-	parser.parse(argc, argv);
+class ArgParser
+{
+	void usage();
+public:
+	ArgParser();
+	virtual ~ArgParser();
 
-	return EXIT_SUCCESS;
+	bool parse(int argc, char* argv[]);
+};
+
 }
