@@ -23,5 +23,11 @@ int main(int argc, char* argv[])
 
 	parser.parse(argc, argv);
 
+	if(argc == 1 || parser.help)
+	{
+		parser.usage();
+		return EXIT_SUCCESS;
+	}
+
 	return EXIT_SUCCESS;
 }
