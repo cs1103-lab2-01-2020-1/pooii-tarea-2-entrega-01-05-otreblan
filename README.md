@@ -1,4 +1,5 @@
 # Programación Orientado a Objetos II
+![C/C++ CI](https://github.com/cs1103-lab2-01-2020-1/pooii-tarea-2-entrega-01-05-otreblan/workflows/C/C++%20CI/badge.svg)
 
 ## Tarea 3
 
@@ -19,7 +20,7 @@ cada orden.
 solamente una orden es enviada por un vehiculo.
 
 
-Tener en cuenta: 
+Tener en cuenta:
 *   Crear CMakeLists.txt
 *   Crear Directorios src, build
 *   Todas las clases involucradas en un sistema logístico mencionadas arriba.
