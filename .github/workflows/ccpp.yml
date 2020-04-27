@@ -18,6 +18,6 @@ jobs:
             - name: build
               run: cd build &&
                   cmake
-                    -DCMAKE_CXX_COMPILER=g++9
+                    -DCMAKE_CXX_COMPILER=g++-9
                   .. &&
                   make -j$(nproc)
