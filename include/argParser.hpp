@@ -19,21 +19,31 @@
 #include <getopt.h>
 #include <vector>
 
+#include <optional>
+
 namespace aru
 {
 
 class ArgParser
 {
 private:
-	void usage();
-
 	static const std::vector<option> options;
 
 public:
 	ArgParser();
 	virtual ~ArgParser();
 
+	void usage();
 	bool parse(int argc, char* argv[]);
+
+	// Muestra la ayuda
+	bool help = false;
+
+	// Trackea una orden
+	std::optional<std::string> track;
+
+	// Muestra las órdenes
+	bool _list = false;
 };
 
 }
