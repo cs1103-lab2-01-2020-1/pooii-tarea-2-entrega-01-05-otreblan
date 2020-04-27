@@ -23,6 +23,7 @@ const std::vector<option> aru::ArgParser::options =
 	{"help", no_argument, nullptr, 'h'},
 	{"track", required_argument, nullptr, 't'},
 	{"list", no_argument, nullptr, 'l'},
+	{"destiny", required_argument, nullptr, 'd'},
 	{nullptr, 0, nullptr, 0}
 };
 
@@ -31,9 +32,10 @@ void aru::ArgParser::usage()
 	std::cout <<
 		"Tarea 3\n"
 		"Modo de uso: tarea-3 [OPCIONES]\n"
-		"\t-h, --help         Muestra esta ayuda\n"
-		"\t-t, --track=ORDEN  Trackea una orden\n"
-		"\t-l, --list         Muestra las órdenes\n"
+		"\t-h, --help                 Muestra esta ayuda\n"
+		"\t-t, --track=ORDEN          Trackea una orden\n"
+		"\t-l, --list                 Muestra las órdenes\n"
+		"\t-d, --destination=DESTINO  Destino de la orden\n"
 	;
 }
 
@@ -51,7 +53,7 @@ bool aru::ArgParser::parse(int argc, char* argv[])
 		int option_index;
 
 		// Parsing
-		cc = getopt_long(argc, argv, "ht:l", options.data(), &option_index);
+		cc = getopt_long(argc, argv, "ht:ld:", options.data(), &option_index);
 
 		if(cc == -1)
 			break;
@@ -66,6 +68,9 @@ bool aru::ArgParser::parse(int argc, char* argv[])
 				break;
 			case 'l':
 				_list = true;
+				break;
+			case 'd':
+				destination.emplace(optarg);
 				break;
 			case '?':
 				std::cerr << "no\n";

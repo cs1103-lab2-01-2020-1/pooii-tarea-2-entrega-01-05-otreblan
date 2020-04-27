@@ -44,6 +44,9 @@ public:
 
 	// Muestra las órdenes
 	bool _list = false;
+
+	// Destino de la orden
+	std::optional<std::string> destination;
 };
 
 }
