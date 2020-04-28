@@ -29,10 +29,5 @@ int main(int argc, char* argv[])
 		return EXIT_SUCCESS;
 	}
 
-	for(auto [a, b]: parser.order)
-	{
-		std::cout << (int)a << ' ' << b << '\n';
-	}
-
 	return EXIT_SUCCESS;
 }

@@ -44,7 +44,7 @@ public:
 	// Trackea una orden
 	std::optional<std::string> track;
 
-	// Muestra las órdenes
+	// Muestra las órdenes activas
 	bool _list = false;
 
 	// Destino de la orden
@@ -52,6 +52,10 @@ public:
 
 	// Cantidad de productos en la orden
 	std::map<aru::productos, int> order;
+
+	// El vehículo en el que se llevará la orden
+	bool bicycle = false;
+	bool truck = false;
 };
 
 }

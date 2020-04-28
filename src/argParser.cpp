@@ -27,6 +27,8 @@ const std::vector<option> aru::ArgParser::options =
 	{"list", no_argument, nullptr, 'l'},
 	{"destiny", required_argument, nullptr, 'd'},
 	{"order", required_argument, nullptr, 'o'},
+	{"bicycle", no_argument, nullptr, 'b'},
+	{"truck", no_argument, nullptr, 'T'},
 	{nullptr, 0, nullptr, 0}
 };
 
@@ -40,12 +42,15 @@ void aru::ArgParser::usage()
 		"\t-l, --list                 Muestra las órdenes\n"
 		"\t-d, --destination=DESTINO  Destino de la orden\n"
 		"\t-o, --order=LISTA          Lista de productos separada por comas\n"
+		"\t-b, --bicycle              Usar la bicicleta como vehículo\n"
+		"\t-T, --truck                Usar el camión como vehículo\n"
 		"\n"
 		"Lista de productos disponibles (En --orden deben ir en minúsculas):\n"
 		"\tPan\n"
 		"\tCarne\n"
 		"Ejemplo:\n"
-		"\ttarea-3 -o pan,pan=100,carne=2\n"
+		"\ttarea-3 -To pan,pan=100,carne=2\n"
+		"Una orden de panes y carnes enviada por camión.\n"
 		"La cantidad de productos se suma, por lo en este ejemplo la orden sería\n"
 		"de 101 panes y 2 carnes.\n"
 	;
@@ -68,8 +73,9 @@ bool aru::ArgParser::parse(int argc, char* argv[])
 
 
 		// Parsing
-		cc = getopt_long(argc, argv, "ht:ld:o:", options.data(), &option_index);
+		cc = getopt_long(argc, argv, "ht:ld:o:bT", options.data(), &option_index);
 
+		// No quedan más opciones
 		if(cc == -1)
 			break;
 
@@ -112,6 +118,14 @@ bool aru::ArgParser::parse(int argc, char* argv[])
 				}
 				break;
 			}
+			case 'b':
+				bicycle = true;
+				truck   = false;
+				break;
+			case 'T':
+				truck   = true;
+				bicycle = false;
+				break;
 			case '?':
 				std::cerr << "no\n";
 				exit(EXIT_FAILURE);
