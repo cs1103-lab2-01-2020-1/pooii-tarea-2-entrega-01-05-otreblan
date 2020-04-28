@@ -58,6 +58,9 @@ void aru::ArgParser::usage()
 		"Una orden del usuario aru de panes y carnes enviada por camión hacia lima.\n"
 		"La cantidad de productos se suma, por lo en este ejemplo la orden sería\n"
 		"de 101 panes y 2 carnes.\n"
+		"\n"
+		"El LIFO está en include/lifo.hpp\n"
+		"Las listas están en la línea 54 del main.cpp\n"
 	;
 }
 

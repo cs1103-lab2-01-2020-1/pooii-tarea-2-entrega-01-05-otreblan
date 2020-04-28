@@ -15,11 +15,47 @@
 // along with tarea-3.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <iostream>
+#include <numeric>
+#include <list>
+
 #include <argParser.hpp>
 #include <system.hpp>
+#include <lifo.hpp>
 
 int main(int argc, char* argv[])
 {
+	//aru::Lifo<int> st;
+	//st.push(1);
+	//st.push(2);
+	//st.push(3);
+	//st.push(2);
+	//st.push(5);
+//
+	//std::cerr << st.top() << '\n';
+	//st.pop();
+	//std::cerr << st.top() << '\n';
+	//st.pop();
+	//std::cerr << st.top() << '\n';
+	//st.pop();
+	//std::cerr << st.top() << '\n';
+	//st.pop();
+	//std::cerr << st.top() << '\n';
+	//st.pop();
+//
+	//return 0;
+	// El lifo está en ../include/lifo.hpp
+
+	const size_t size = 10;
+	int arr1[size], arr2[size];
+
+	std::iota(arr1, arr1+size, 0);
+	std::iota(arr2, arr2+size, 0);
+
+	// Ahora son listas
+	std::list list1(arr1, arr1+size);
+	std::list list2(arr2, arr2+size);
+
+
 	aru::ArgParser parser;
 
 	parser.parse(argc, argv);

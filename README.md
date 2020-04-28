@@ -1,6 +1,24 @@
 # Programación Orientado a Objetos II
 ![C/C++ CI](https://github.com/cs1103-lab2-01-2020-1/pooii-tarea-2-entrega-01-05-otreblan/workflows/C/C++%20CI/badge.svg)
 
+## Build
+### Dependencias
+- `Ubuntu >= 20.04`
+- `CMake >= 3.13`
+- `gcc >= 9`
+- `git`
+
+```bash
+git clone https://github.com/cs1103-lab2-01-2020-1/pooii-tarea-2-entrega-01-05-otreblan
+cd pooii-tarea-2-entrega-01-05-otreblan
+mkdir build
+cd build
+cmake ..
+make -j$(nproc)
+
+./tarea-3 --help
+```
+
 ## Tarea 3
 
 1.- Implementar un sistema logístico en C++.
@@ -29,7 +47,7 @@ Tener en cuenta:
 2.- Implementar una estructura de datos LIFO (Last In First Out) usando arrays.
 
 
-3.- Crear dos arrays y convertilas en listas donde se pueda realizar 
+3.- Crear dos arrays y convertilas en listas donde se pueda realizar
 operaciones de merge, sorting, busqueda binaria, y obtener el lower bound del elemento mayor del array generado
 
 
