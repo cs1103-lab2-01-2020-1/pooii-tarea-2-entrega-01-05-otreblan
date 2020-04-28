@@ -23,7 +23,7 @@
 const std::vector<option> aru::ArgParser::options =
 {
 	{"help",    no_argument,       nullptr, 'h'},
-	{"track",   required_argument, nullptr, 't'},
+	{"track",   no_argument,       nullptr, 't'},
 	{"list",    no_argument,       nullptr, 'l'},
 	{"destiny", required_argument, nullptr, 'd'},
 	{"order",   required_argument, nullptr, 'o'},
@@ -40,7 +40,7 @@ void aru::ArgParser::usage()
 		"Tarea 3\n"
 		"Modo de uso: tarea-3 [OPCIONES]\n"
 		"\t-h, --help                 Muestra esta ayuda\n"
-		"\t-t, --track=USER           Trackea las órdenes de un usuario\n"
+		"\t-t, --track                Trackea las órdenes de un usuario\n"
 		"\t-l, --list                 Muestra las órdenes\n"
 		"\t-d, --destination=DESTINO  Destino de la orden\n"
 		"\t-o, --order=LISTA          Lista de productos separada por comas\n"
@@ -78,7 +78,7 @@ bool aru::ArgParser::parse(int argc, char* argv[])
 
 
 		// Parsing
-		cc = getopt_long(argc, argv, "ht:ld:o:bTu:", options.data(), &option_index);
+		cc = getopt_long(argc, argv, "htld:o:bTu:", options.data(), &option_index);
 
 		// No quedan más opciones
 		if(cc == -1)
@@ -87,13 +87,13 @@ bool aru::ArgParser::parse(int argc, char* argv[])
 		switch (cc)
 		{
 			case 'h':
-				help = true;
+				action = Action::help;
 				break;
 			case 't':
-				track.emplace(optarg);
+				action = Action::track;
 				break;
 			case 'l':
-				_list = true;
+				action = Action::list;
 				break;
 			case 'd':
 				destination.emplace(optarg);
@@ -124,12 +124,10 @@ bool aru::ArgParser::parse(int argc, char* argv[])
 				break;
 			}
 			case 'b':
-				bicycle = true;
-				truck   = false;
+				vehicle = Vehicle::bicycle;
 				break;
 			case 'T':
-				truck   = true;
-				bicycle = false;
+				vehicle = Vehicle::truck;
 				break;
 			case 'u':
 				user.emplace(optarg);

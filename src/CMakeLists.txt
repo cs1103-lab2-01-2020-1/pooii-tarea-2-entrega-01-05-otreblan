@@ -18,4 +18,5 @@ target_sources(${PROJECT_NAME}
 	PRIVATE
 		main.cpp
 		argParser.cpp
+		system.cpp
 )

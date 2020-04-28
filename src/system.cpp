@@ -14,25 +14,53 @@
 // You should have received a copy of the GNU General Public License
 // along with tarea-3.  If not, see <http://www.gnu.org/licenses/>.
 
-#include <iostream>
-#include <argParser.hpp>
 #include <system.hpp>
 
-int main(int argc, char* argv[])
+#include <iostream>
+
+aru::System::System(ArgParser& args):
+	args(args)
+{};
+
+aru::System::~System(){};
+
+bool aru::System::track(const std::string& user)
 {
-	aru::ArgParser parser;
+	return true;
+}
 
-	parser.parse(argc, argv);
+bool aru::System::
+	order(const std::string& user, const std::map<aru::productos, int>& order)
+{
+	return true;
+}
 
-	if(argc == 1)
+bool aru::System::list()
+{
+	return true;
+}
+
+bool aru::System::start()
+{
+	if(args.action.has_value())
 	{
-		parser.usage();
-		return EXIT_SUCCESS;
+		switch (*args.action)
+		{
+			case Action::help:
+				args.usage();
+				break;
+			case Action::track:
+				break;
+			case Action::list:
+				break;
+			case Action::order:
+				break;
+		}
 	}
-
-	aru::System system(parser);
-
-	system.start();
-
-	return EXIT_SUCCESS;
+	else
+	{
+		std::cerr << "Acción no especificada\n";
+		exit(EXIT_FAILURE);
+	}
+	return true;
 }

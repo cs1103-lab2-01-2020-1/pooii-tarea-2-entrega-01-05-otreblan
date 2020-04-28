@@ -14,25 +14,26 @@
 // You should have received a copy of the GNU General Public License
 // along with tarea-3.  If not, see <http://www.gnu.org/licenses/>.
 
-#include <iostream>
+#pragma once
+
 #include <argParser.hpp>
-#include <system.hpp>
 
-int main(int argc, char* argv[])
+namespace aru
 {
-	aru::ArgParser parser;
 
-	parser.parse(argc, argv);
+class System
+{
+private:
+	ArgParser& args;
 
-	if(argc == 1)
-	{
-		parser.usage();
-		return EXIT_SUCCESS;
-	}
+	bool track(const std::string& user);
+	bool order(const std::string& user, const std::map<aru::productos, int>& order);
+	bool list();
+public:
+	System(ArgParser& args);
+	virtual ~System();
 
-	aru::System system(parser);
+	bool start();
+};
 
-	system.start();
-
-	return EXIT_SUCCESS;
 }
