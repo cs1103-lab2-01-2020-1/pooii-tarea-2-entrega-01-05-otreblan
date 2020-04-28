@@ -156,8 +156,6 @@ bool aru::System::recalculate_orders(std::deque<Order>& orders, Vehicle vehicle)
 
 bool aru::System::re_order(const std::deque<Order>& orders, Vehicle vehicle)
 {
-	if(orders.empty())
-		return false;
 
 	fs::path vehicle_path;
 	switch (vehicle)
@@ -168,6 +166,12 @@ bool aru::System::re_order(const std::deque<Order>& orders, Vehicle vehicle)
 		case Vehicle::truck:
 			vehicle_path = truck;
 			break;
+	}
+
+	if(orders.empty())
+	{
+		fs::remove(vehicle_path);
+		return false;
 	}
 	std::ofstream order_list(vehicle_path);
 
