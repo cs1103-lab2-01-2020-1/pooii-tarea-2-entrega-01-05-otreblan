@@ -60,6 +60,7 @@ void aru::ArgParser::usage()
 		"de 101 panes y 2 carnes.\n"
 		"\n"
 		"El LIFO está en include/lifo.hpp\n"
+		"Las listas están en la línea 54 del main.cpp\n"
 	;
 }
 
