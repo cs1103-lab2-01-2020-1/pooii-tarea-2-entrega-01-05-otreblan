@@ -19,6 +19,10 @@
 
 #include <iostream>
 #include <fstream>
+#include <deque>
+
+const time_t aru::System::bicycle_time = 20*60;
+const time_t aru::System::truck_time = 5*60;
 
 aru::System::System(ArgParser& args):
 	args(args)
@@ -49,6 +53,134 @@ aru::System::~System(){};
 
 bool aru::System::track(const std::string& user)
 {
+	std::deque<Order> truck_orders = parse_list(truck);
+	std::deque<Order> bicycle_orders = parse_list(bicycle);
+
+	recalculate_orders(truck_orders, Vehicle::truck);
+	recalculate_orders(bicycle_orders, Vehicle::bicycle);
+
+	if(!truck_orders.empty())
+	{
+		std::cout << "Camión\n";
+		for(const auto& i: truck_orders)
+		{
+			if(i.user == user)
+				i.fancy_print(std::cout);
+		}
+	}
+
+	if(!bicycle_orders.empty())
+	{
+		std::cout << "Bicicleta\n";
+		for(const auto& i: bicycle_orders)
+		{
+			if(i.user == user)
+				i.fancy_print(std::cout);
+		}
+	}
+
+	re_order(truck_orders, Vehicle::truck);
+	re_order(bicycle_orders, Vehicle::bicycle);
+
+	return true;
+}
+
+std::deque<aru::Order> aru::System::parse_list(fs::path vehicle)
+{
+	aru::Order order;
+	std::deque<Order> resu;
+
+	std::ifstream _vehicle(vehicle);
+	if(_vehicle.is_open() && _vehicle.good())
+	{
+		while(_vehicle >> order)
+		{
+			resu.push_back(order);
+		}
+	}
+
+	return resu;
+}
+
+bool aru::System::recalculate_orders(std::deque<Order>& orders, Vehicle vehicle)
+{
+	if(orders.empty())
+		return false;
+
+	time_t now = time(NULL);
+	time_t vehicle_time;
+	switch (vehicle)
+	{
+		case Vehicle::bicycle:
+			vehicle_time = bicycle_time;
+			break;
+		case Vehicle::truck:
+			vehicle_time = truck_time;
+			break;
+	}
+
+	Order& first_order = *orders.begin();
+
+	if(!first_order.exit_time.has_value())
+		first_order.exit_time = first_order.time;
+
+	while(true)
+	{
+		time_t exit_time = orders.begin()->exit_time.value();
+		time_t arrival_time = exit_time + vehicle_time;
+
+		if(arrival_time <= now)
+		{
+			orders.pop_front();
+
+			if(orders.empty())
+				break;
+
+			Order& next_order = *orders.begin();
+
+			if(next_order.time < arrival_time)
+			{
+				next_order.exit_time = arrival_time;
+			}
+			else
+			{
+				next_order.exit_time = next_order.time;
+			}
+		}
+		else
+			break;
+	}
+
+	return true;
+}
+
+bool aru::System::re_order(const std::deque<Order>& orders, Vehicle vehicle)
+{
+	if(orders.empty())
+		return false;
+
+	fs::path vehicle_path;
+	switch (vehicle)
+	{
+		case Vehicle::bicycle:
+			vehicle_path = bicycle;
+			break;
+		case Vehicle::truck:
+			vehicle_path = truck;
+			break;
+	}
+	std::ofstream order_list(vehicle_path);
+
+	if(order_list.is_open() && order_list.good())
+	{
+		for(const auto& i: orders)
+		{
+			order_list << i;
+		}
+	}
+
+	order_list.close();
+
 	return true;
 }
 
@@ -57,12 +189,11 @@ bool aru::System::order(const std::string& user,
 	const Vehicle                          vehicle,
 	const std::map<aru::Products, int>&   order)
 {
-	time_t now;
-	time(&now);
+	time_t now = time(NULL);
 
 	std::ofstream _vehicle;
 
-	aru::Order new_order = {now, user, destination, vehicle, order};
+	aru::Order new_order = {now, std::nullopt, user, destination, vehicle, order};
 
 	switch (vehicle)
 	{
