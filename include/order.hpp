@@ -18,12 +18,15 @@
 
 #include <argParser.hpp>
 
+#include <optional>
+
 namespace aru
 {
 
 struct Order
 {
 	time_t time;
+	std::optional<time_t> exit_time;
 	std::string user;
 	std::string destination;
 	Vehicle vehicle;
@@ -32,7 +35,7 @@ struct Order
 	friend std::ostream& operator <<(std::ostream& os, const Order& order);
 	friend std::istream& operator >>(std::istream& is, Order& order);
 
-	bool fancy_print(std::ostream& os);
+	bool fancy_print(std::ostream& os) const;
 };
 
 }

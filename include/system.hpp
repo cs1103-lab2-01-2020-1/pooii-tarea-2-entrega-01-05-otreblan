@@ -17,9 +17,10 @@
 #pragma once
 
 #include <argParser.hpp>
+#include <order.hpp>
 
 #include <filesystem>
-
+#include <deque>
 
 namespace aru
 {
@@ -29,6 +30,12 @@ namespace fs = std::filesystem;
 class System
 {
 private:
+	// Tiempo que demora la bicicleta en completar una orden
+	static const time_t bicycle_time;
+
+	// Tiempo que demora el camión en completar una orden
+	static const time_t truck_time;
+
 	ArgParser& args;
 
 	fs::path cache_dir;
@@ -36,12 +43,18 @@ private:
 	fs::path truck;
 
 	bool track(const std::string& user);
+	std::deque<Order> parse_list(fs::path vehicle);
+	bool recalculate_orders(std::deque<Order>& orders, Vehicle vehicle);
+	bool re_order(const std::deque<Order>& orders, Vehicle vehicle);
+
 	bool order(const std::string& user,
 		const std::string& destination,
 		const Vehicle vehicle,
 		const std::map<aru::Products, int>& order);
+
 	bool list();
 	bool list_print(std::ifstream& os, const std::string& vehicle);
+
 public:
 	System(ArgParser& args);
 	virtual ~System();

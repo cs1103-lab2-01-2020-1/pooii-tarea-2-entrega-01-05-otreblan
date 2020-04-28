@@ -19,11 +19,18 @@
 
 #include <iostream>
 #include <sstream>
+#include <stdlib.h>
 
 std::ostream& aru::operator <<(std::ostream& os, const aru::Order& order)
 {
+	os << order.time << '\t';
+
+	if(order.exit_time.has_value())
+		os << order.exit_time.value() << '\t';
+	else
+		os << "na\t";
+
 	os
-		<< order.time << '\t'
 		<< order.user << '\t'
 		<< order.destination << '\t'
 		<< (int)order.vehicle << '\t'
@@ -44,11 +51,22 @@ std::istream& aru::operator >>(std::istream& is, Order& order)
 	int vehicle;
 	is
 		>> order.time
+		>> buf
 		>> order.user
 		>> order.destination
 		>> vehicle
 	;
+
 	order.vehicle = (Vehicle)vehicle;
+	if(buf != "na")
+	{
+		order.exit_time = atoi(buf.c_str());
+	}
+	else
+	{
+		order.exit_time.reset();
+	}
+
 
 	int n1;
 	int n2;
@@ -71,15 +89,26 @@ std::istream& aru::operator >>(std::istream& is, Order& order)
 	return is;
 }
 
-bool aru::Order::fancy_print(std::ostream& os)
+bool aru::Order::fancy_print(std::ostream& os) const
 {
 	os
 		<< '\t'
 		<< "\033[1;33m"
 		<< "Tiempo: "
 		<< "\033[0m"
-		<< ctime(&time)
+		<< ctime(&time);
 
+	if(exit_time.has_value())
+	{
+		os
+			<< '\t'
+			<< "\033[1;33m"
+			<< "Tiempo de salida: "
+			<< "\033[0m"
+			<< ctime(&exit_time.value());
+	}
+
+	os
 		<< '\t'
 		<< "\033[1;33m"
 		<< "Usuario: "
@@ -96,7 +125,7 @@ bool aru::Order::fancy_print(std::ostream& os)
 
 		<< '\t'
 		<< "\033[1;33m"
-		<< "Productos: "
+		<< "Productos:"
 		<< "\033[0m"
 		<< '\n'
 	;
