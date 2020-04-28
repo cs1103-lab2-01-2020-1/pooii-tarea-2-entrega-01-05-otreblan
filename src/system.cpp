@@ -107,7 +107,7 @@ bool aru::System::list_print(std::ifstream& os, const std::string& vehicle)
 		std::cout << '\n' << vehicle << ":\n";
 		while(os >> order)
 		{
-			std::cout << order;
+			order.fancy_print(std::cout);
 		}
 	}
 	return true;
