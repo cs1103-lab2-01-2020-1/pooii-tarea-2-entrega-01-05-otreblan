@@ -26,6 +26,22 @@
 namespace aru
 {
 
+// Lista de las posibles acciones
+enum class Action
+{
+	help,
+	track,
+	list,
+	order
+};
+
+// Posibles vehículos
+enum class Vehicle
+{
+	bicycle,
+	truck
+};
+
 class ArgParser
 {
 private:
@@ -38,24 +54,17 @@ public:
 	void usage();
 	bool parse(int argc, char* argv[]);
 
-	// Muestra la ayuda
-	bool help = false;
-
-	// Trackea una orden
-	std::optional<std::string> track;
-
-	// Muestra las órdenes activas
-	bool _list = false;
-
 	// Destino de la orden
 	std::optional<std::string> destination;
 
 	// Cantidad de productos en la orden
-	std::map<aru::productos, int> order;
+	std::map<aru::Products, int> order;
 
 	// El vehículo en el que se llevará la orden
-	bool bicycle = false;
-	bool truck = false;
+	std::optional<Vehicle> vehicle;
+
+	// La acción que ejecutará el programa
+	std::optional<Action> action;
 
 	// El usuario
 	std::optional<std::string> user;

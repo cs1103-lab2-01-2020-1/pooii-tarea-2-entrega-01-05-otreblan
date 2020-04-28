@@ -20,7 +20,7 @@ namespace aru
 {
 
 // Lista de productos
-enum class productos
+enum class Products
 {
 	pan = 0,
 	carne
@@ -32,8 +32,8 @@ enum class productos
 
 static char* const productVector[] =
 {
-	[(int)productos::pan] = (char*)"pan",
-	[(int)productos::carne] = (char*)"carne",
+	[(int)Products::pan] = (char*)"pan",
+	[(int)Products::carne] = (char*)"carne",
 	0
 };
 
