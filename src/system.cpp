@@ -29,8 +29,10 @@ bool aru::System::track(const std::string& user)
 	return true;
 }
 
-bool aru::System::
-	order(const std::string& user, const std::map<aru::productos, int>& order)
+bool aru::System::order(const std::string& user,
+	const std::string& destination,
+	const std::map<aru::productos, int>& order,
+	const Vehicle vehicle)
 {
 	return true;
 }
@@ -50,10 +52,44 @@ bool aru::System::start()
 				args.usage();
 				break;
 			case Action::track:
+				if(args.user.has_value())
+				{
+					track(args.user.value());
+				}
+				else
+				{
+					std::cerr << "Usuario no especificado\n";
+					exit(EXIT_FAILURE);
+				}
 				break;
 			case Action::list:
+				list();
 				break;
 			case Action::order:
+				if(!args.user.has_value())
+				{
+					std::cerr << "Usuario no especificado\n";
+					exit(EXIT_FAILURE);
+				}
+				if(!args.destination.has_value())
+				{
+					std::cerr << "Destino no especificado\n";
+					exit(EXIT_FAILURE);
+				}
+				if(!args.vehicle.has_value())
+				{
+					std::cerr << "Vehículo no especificado\n";
+					exit(EXIT_FAILURE);
+				}
+				if(args.order.size() == 0)
+				{
+					std::cerr << "La orden no puede estar vacía\n";
+					exit(EXIT_FAILURE);
+				}
+				order(args.user.value(),
+					args.destination.value(),
+					args.order,
+					args.vehicle.value());
 				break;
 		}
 	}

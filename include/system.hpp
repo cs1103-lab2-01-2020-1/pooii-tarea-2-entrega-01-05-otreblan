@@ -27,7 +27,10 @@ private:
 	ArgParser& args;
 
 	bool track(const std::string& user);
-	bool order(const std::string& user, const std::map<aru::productos, int>& order);
+	bool order(const std::string& user,
+		const std::string& destination,
+		const std::map<aru::productos, int>& order,
+		const Vehicle vehicle);
 	bool list();
 public:
 	System(ArgParser& args);

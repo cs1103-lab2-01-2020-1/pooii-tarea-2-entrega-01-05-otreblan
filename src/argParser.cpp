@@ -100,6 +100,7 @@ bool aru::ArgParser::parse(int argc, char* argv[])
 				break;
 			case 'o':
 			{
+				action = Action::order;
 				char* optargarg;
 				int cantidad = 0;
 				productos prod;
@@ -120,6 +121,10 @@ bool aru::ArgParser::parse(int argc, char* argv[])
 						cantidad = atoi(optargarg);
 
 					order[prod] += cantidad;
+
+					// Sin órdenes vacías
+					if(order[prod] == 0)
+						order.erase(prod);
 				}
 				break;
 			}
