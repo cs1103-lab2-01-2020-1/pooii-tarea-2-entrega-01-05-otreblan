@@ -48,12 +48,14 @@ void aru::ArgParser::usage()
 		"\t-T, --truck                Usar el camión como vehículo\n"
 		"\t-u, --user=USUARIO         El usuario que envía la orden\n"
 		"\n"
-		"Lista de productos disponibles (En --orden deben ir en minúsculas):\n"
+		"Lista de productos disponibles (En --order deben ir en minúsculas):\n"
 		"\tPan\n"
 		"\tCarne\n"
+		"\n"
 		"Ejemplo:\n"
-		"\ttarea-3 -To pan,pan=100,carne=2 -u aru\n"
-		"Una orden de panes y carnes enviada por camión del usuario aru.\n"
+		"\ttarea-3 -To pan,pan=100,carne=2 -u aru -d lima\n"
+		"\n"
+		"Una orden del usuario aru de panes y carnes enviada por camión hacia lima.\n"
 		"La cantidad de productos se suma, por lo en este ejemplo la orden sería\n"
 		"de 101 panes y 2 carnes.\n"
 	;
@@ -143,9 +145,6 @@ bool aru::ArgParser::parse(int argc, char* argv[])
 	{
 		std::cerr << argv[optind++] << '\n';
 	}
-
-	//int i = '?';
-	//std::cerr << i;
 
 	return true;
 }
