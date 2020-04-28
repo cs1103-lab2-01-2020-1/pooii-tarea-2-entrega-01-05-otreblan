@@ -17,9 +17,31 @@
 #include <iostream>
 #include <argParser.hpp>
 #include <system.hpp>
+#include <lifo.hpp>
 
 int main(int argc, char* argv[])
 {
+	//aru::Lifo<int> st;
+	//st.push(1);
+	//st.push(2);
+	//st.push(3);
+	//st.push(2);
+	//st.push(5);
+//
+	//std::cerr << st.top() << '\n';
+	//st.pop();
+	//std::cerr << st.top() << '\n';
+	//st.pop();
+	//std::cerr << st.top() << '\n';
+	//st.pop();
+	//std::cerr << st.top() << '\n';
+	//st.pop();
+	//std::cerr << st.top() << '\n';
+	//st.pop();
+//
+	//return 0;
+	// El lifo está en ../include/lifo.hpp
+
 	aru::ArgParser parser;
 
 	parser.parse(argc, argv);
