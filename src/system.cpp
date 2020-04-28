@@ -21,8 +21,8 @@
 #include <fstream>
 #include <deque>
 
-const time_t aru::System::bicycle_time = 20*60;
-const time_t aru::System::truck_time = 5*60;
+const time_t aru::System::bicycle_time = bicycle_mins*60;
+const time_t aru::System::truck_time = truck_mins*60;
 
 aru::System::System(ArgParser& args):
 	args(args)

@@ -27,8 +27,8 @@ enum class Products
 };
 
 #pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wpragmas"
 #pragma GCC diagnostic ignored "-Wc99-designator"
-#pragma GCC diagnostic ignored "-Wunused-variable"
 
 static char* const productVector[] =
 {
