@@ -31,6 +31,8 @@ struct Order
 
 	friend std::ostream& operator <<(std::ostream& os, const Order& order);
 	friend std::istream& operator >>(std::istream& is, Order& order);
+
+	bool fancy_print(std::ostream& os);
 };
 
 }

@@ -60,32 +60,56 @@ bool aru::System::order(const std::string& user,
 	time_t now;
 	time(&now);
 
-	std::ofstream vehiclePath;
+	std::ofstream _vehicle;
 
 	aru::Order new_order = {now, user, destination, vehicle, order};
 
 	switch (vehicle)
 	{
 		case Vehicle::bicycle:
-			vehiclePath.open(bicycle, std::ios::app);
+			_vehicle.open(bicycle, std::ios::app);
 			break;
 		case Vehicle::truck:
-			vehiclePath.open(truck, std::ios::app);
+			_vehicle.open(truck, std::ios::app);
 			break;
 	}
 
-	if(vehiclePath.is_open() && vehiclePath.good())
+	if(_vehicle.is_open() && _vehicle.good())
 	{
-		vehiclePath << new_order;
+		_vehicle << new_order;
 	}
 
-	vehiclePath.close();
+	_vehicle.close();
 
 	return true;
 }
 
 bool aru::System::list()
 {
+	std::ifstream vehicle;
+
+	vehicle.open(truck);
+	list_print(vehicle, "Camión");
+	vehicle.close();
+
+	vehicle.open(bicycle);
+	list_print(vehicle, "Bicicleta");
+	vehicle.close();
+
+	return true;
+}
+
+bool aru::System::list_print(std::ifstream& os, const std::string& vehicle)
+{
+	aru::Order order;
+	if(os.is_open() && os.good())
+	{
+		std::cout << '\n' << vehicle << ":\n";
+		while(os >> order)
+		{
+			order.fancy_print(std::cout);
+		}
+	}
 	return true;
 }
 

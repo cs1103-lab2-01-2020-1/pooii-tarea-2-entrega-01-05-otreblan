@@ -15,6 +15,8 @@
 // along with tarea-3.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <order.hpp>
+#include <products.hpp>
+
 #include <iostream>
 #include <sstream>
 
@@ -67,4 +69,54 @@ std::istream& aru::operator >>(std::istream& is, Order& order)
 
 
 	return is;
+}
+
+bool aru::Order::fancy_print(std::ostream& os)
+{
+	os
+		<< '\t'
+		<< "\033[1;33m"
+		<< "Tiempo: "
+		<< "\033[0m"
+		<< ctime(&time)
+
+		<< '\t'
+		<< "\033[1;33m"
+		<< "Usuario: "
+		<< "\033[0m"
+		<< user
+		<< '\n'
+
+		<< '\t'
+		<< "\033[1;33m"
+		<< "Destino: "
+		<< "\033[0m"
+		<< destination
+		<< '\n'
+
+		<< '\t'
+		<< "\033[1;33m"
+		<< "Productos: "
+		<< "\033[0m"
+		<< '\n'
+	;
+
+	for(const auto& [product, Q]: products)
+	{
+		std::string product_name = productVector[(int)product];
+		product_name.data()[0] = toupper(product_name.data()[0]);
+
+		os
+			<< "\t\t"
+			<< "\033[1;31m"
+			<< product_name << ": "
+			<< "\033[0m"
+			<< Q
+			<< '\n'
+		;
+	}
+
+	os << '\n';
+
+	return true;
 }
