@@ -42,6 +42,10 @@ enum class Vehicle
 	truck
 };
 
+// Minutos que demora cada vehículo
+#define bicycle_mins 10
+#define truck_mins 5
+
 class ArgParser
 {
 private:

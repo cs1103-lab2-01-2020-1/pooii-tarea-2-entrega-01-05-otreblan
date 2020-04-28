@@ -23,6 +23,12 @@
 namespace aru
 {
 
+struct Order;
+
+std::ostream& operator <<(std::ostream& os, const Order& order);
+std::istream& operator >>(std::istream& is, Order& order);
+
+
 struct Order
 {
 	time_t time;
