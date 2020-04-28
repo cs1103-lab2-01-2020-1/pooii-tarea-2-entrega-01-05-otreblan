@@ -41,6 +41,7 @@ private:
 		const Vehicle vehicle,
 		const std::map<aru::Products, int>& order);
 	bool list();
+	bool list_print(std::ifstream& os, const std::string& vehicle);
 public:
 	System(ArgParser& args);
 	virtual ~System();

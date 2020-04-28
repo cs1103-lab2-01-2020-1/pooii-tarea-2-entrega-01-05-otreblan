@@ -86,32 +86,30 @@ bool aru::System::order(const std::string& user,
 
 bool aru::System::list()
 {
-	std::ifstream _vehicle;
+	std::ifstream vehicle;
+
+	vehicle.open(truck);
+	list_print(vehicle, "Camión");
+	vehicle.close();
+
+	vehicle.open(bicycle);
+	list_print(vehicle, "Bicicleta");
+	vehicle.close();
+
+	return true;
+}
+
+bool aru::System::list_print(std::ifstream& os, const std::string& vehicle)
+{
 	aru::Order order;
-
-	_vehicle.open(truck);
-	if(_vehicle.is_open() && _vehicle.good())
+	if(os.is_open() && os.good())
 	{
-		std::cout << "Camión:\n";
-		while(_vehicle >> order)
-		{
-			std::cout << order;
-		}
-		std::cout << '\n';
-	}
-	_vehicle.close();
-
-	_vehicle.open(bicycle);
-	if(_vehicle.is_open() && _vehicle.good())
-	{
-		std::cout << "Bicicleta:\n";
-		while(_vehicle >> order)
+		std::cout << '\n' << vehicle << ":\n";
+		while(os >> order)
 		{
 			std::cout << order;
 		}
 	}
-	_vehicle.close();
-
 	return true;
 }
 
