@@ -22,14 +22,16 @@
 
 const std::vector<option> aru::ArgParser::options =
 {
-	{"help", no_argument, nullptr, 'h'},
-	{"track", required_argument, nullptr, 't'},
-	{"list", no_argument, nullptr, 'l'},
+	{"help",    no_argument,       nullptr, 'h'},
+	{"track",   required_argument, nullptr, 't'},
+	{"list",    no_argument,       nullptr, 'l'},
 	{"destiny", required_argument, nullptr, 'd'},
-	{"order", required_argument, nullptr, 'o'},
-	{"bicycle", no_argument, nullptr, 'b'},
-	{"truck", no_argument, nullptr, 'T'},
-	{nullptr, 0, nullptr, 0}
+	{"order",   required_argument, nullptr, 'o'},
+	{"bicycle", no_argument,       nullptr, 'b'},
+	{"truck",   no_argument,       nullptr, 'T'},
+	{"user",    required_argument, nullptr, 'u'},
+
+	{nullptr,   0,                 nullptr, 0}
 };
 
 void aru::ArgParser::usage()
@@ -44,13 +46,14 @@ void aru::ArgParser::usage()
 		"\t-o, --order=LISTA          Lista de productos separada por comas\n"
 		"\t-b, --bicycle              Usar la bicicleta como vehículo\n"
 		"\t-T, --truck                Usar el camión como vehículo\n"
+		"\t-u, --user=USUARIO         El usuario que envía la orden\n"
 		"\n"
 		"Lista de productos disponibles (En --orden deben ir en minúsculas):\n"
 		"\tPan\n"
 		"\tCarne\n"
 		"Ejemplo:\n"
-		"\ttarea-3 -To pan,pan=100,carne=2\n"
-		"Una orden de panes y carnes enviada por camión.\n"
+		"\ttarea-3 -To pan,pan=100,carne=2 -u aru\n"
+		"Una orden de panes y carnes enviada por camión del usuario aru.\n"
 		"La cantidad de productos se suma, por lo en este ejemplo la orden sería\n"
 		"de 101 panes y 2 carnes.\n"
 	;
@@ -73,7 +76,7 @@ bool aru::ArgParser::parse(int argc, char* argv[])
 
 
 		// Parsing
-		cc = getopt_long(argc, argv, "ht:ld:o:bT", options.data(), &option_index);
+		cc = getopt_long(argc, argv, "ht:ld:o:bTu:", options.data(), &option_index);
 
 		// No quedan más opciones
 		if(cc == -1)
@@ -125,6 +128,9 @@ bool aru::ArgParser::parse(int argc, char* argv[])
 			case 'T':
 				truck   = true;
 				bicycle = false;
+				break;
+			case 'u':
+				user.emplace(optarg);
 				break;
 			case '?':
 				std::cerr << "no\n";

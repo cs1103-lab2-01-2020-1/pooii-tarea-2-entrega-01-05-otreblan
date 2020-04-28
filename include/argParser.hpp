@@ -56,6 +56,9 @@ public:
 	// El vehículo en el que se llevará la orden
 	bool bicycle = false;
 	bool truck = false;
+
+	// El usuario
+	std::optional<std::string> user;
 };
 
 }
