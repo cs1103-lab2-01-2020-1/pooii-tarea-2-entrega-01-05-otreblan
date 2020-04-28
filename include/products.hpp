@@ -16,49 +16,26 @@
 
 #pragma once
 
-#include <products.hpp>
-
-#include <getopt.h>
-#include <vector>
-#include <optional>
-#include <map>
-
 namespace aru
 {
 
-class ArgParser
+// Lista de productos
+enum class productos
 {
-private:
-	static const std::vector<option> options;
-
-public:
-	ArgParser();
-	virtual ~ArgParser();
-
-	void usage();
-	bool parse(int argc, char* argv[]);
-
-	// Muestra la ayuda
-	bool help = false;
-
-	// Trackea una orden
-	std::optional<std::string> track;
-
-	// Muestra las órdenes activas
-	bool _list = false;
-
-	// Destino de la orden
-	std::optional<std::string> destination;
-
-	// Cantidad de productos en la orden
-	std::map<aru::productos, int> order;
-
-	// El vehículo en el que se llevará la orden
-	bool bicycle = false;
-	bool truck = false;
-
-	// El usuario
-	std::optional<std::string> user;
+	pan = 0,
+	carne
 };
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wc99-designator"
+#pragma GCC diagnostic ignored "-Wunused-variable"
+
+static char* const productVector[] =
+{
+	[(int)productos::pan] = (char*)"pan",
+	[(int)productos::carne] = (char*)"carne",
+	0
+};
+
+#pragma GCC diagnostic pop
 }

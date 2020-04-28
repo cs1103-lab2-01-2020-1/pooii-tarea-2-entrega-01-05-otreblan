@@ -15,15 +15,23 @@
 // along with tarea-3.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <argParser.hpp>
+#include <products.hpp>
+
 #include <string>
 #include <iostream>
 
 const std::vector<option> aru::ArgParser::options =
 {
-	{"help", no_argument, nullptr, 'h'},
-	{"track", required_argument, nullptr, 't'},
-	{"list", no_argument, nullptr, 'l'},
-	{nullptr, 0, nullptr, 0}
+	{"help",    no_argument,       nullptr, 'h'},
+	{"track",   required_argument, nullptr, 't'},
+	{"list",    no_argument,       nullptr, 'l'},
+	{"destiny", required_argument, nullptr, 'd'},
+	{"order",   required_argument, nullptr, 'o'},
+	{"bicycle", no_argument,       nullptr, 'b'},
+	{"truck",   no_argument,       nullptr, 'T'},
+	{"user",    required_argument, nullptr, 'u'},
+
+	{nullptr,   0,                 nullptr, 0}
 };
 
 void aru::ArgParser::usage()
@@ -31,9 +39,25 @@ void aru::ArgParser::usage()
 	std::cout <<
 		"Tarea 3\n"
 		"Modo de uso: tarea-3 [OPCIONES]\n"
-		"\t-h, --help         Muestra esta ayuda\n"
-		"\t-t, --track=ORDEN  Trackea una orden\n"
-		"\t-l, --list         Muestra las órdenes\n"
+		"\t-h, --help                 Muestra esta ayuda\n"
+		"\t-t, --track=USER           Trackea las órdenes de un usuario\n"
+		"\t-l, --list                 Muestra las órdenes\n"
+		"\t-d, --destination=DESTINO  Destino de la orden\n"
+		"\t-o, --order=LISTA          Lista de productos separada por comas\n"
+		"\t-b, --bicycle              Usar la bicicleta como vehículo\n"
+		"\t-T, --truck                Usar el camión como vehículo\n"
+		"\t-u, --user=USUARIO         El usuario que envía la orden\n"
+		"\n"
+		"Lista de productos disponibles (En --order deben ir en minúsculas):\n"
+		"\tPan\n"
+		"\tCarne\n"
+		"\n"
+		"Ejemplo:\n"
+		"\ttarea-3 -To pan,pan=100,carne=2 -u aru -d lima\n"
+		"\n"
+		"Una orden del usuario aru de panes y carnes enviada por camión hacia lima.\n"
+		"La cantidad de productos se suma, por lo en este ejemplo la orden sería\n"
+		"de 101 panes y 2 carnes.\n"
 	;
 }
 
@@ -42,6 +66,8 @@ aru::ArgParser::~ArgParser(){};
 
 bool aru::ArgParser::parse(int argc, char* argv[])
 {
+	using aru::productos;
+
 	// No errors from getopt
 	opterr = 0;
 
@@ -50,9 +76,11 @@ bool aru::ArgParser::parse(int argc, char* argv[])
 		int cc;
 		int option_index;
 
-		// Parsing
-		cc = getopt_long(argc, argv, "ht:l", options.data(), &option_index);
 
+		// Parsing
+		cc = getopt_long(argc, argv, "ht:ld:o:bTu:", options.data(), &option_index);
+
+		// No quedan más opciones
 		if(cc == -1)
 			break;
 
@@ -67,6 +95,45 @@ bool aru::ArgParser::parse(int argc, char* argv[])
 			case 'l':
 				_list = true;
 				break;
+			case 'd':
+				destination.emplace(optarg);
+				break;
+			case 'o':
+			{
+				char* optargarg;
+				int cantidad = 0;
+				productos prod;
+				while(*optarg != '\0')
+				{
+					prod = (productos)getsubopt(&optarg, productVector, &optargarg);
+
+					if((int)prod == -1)
+					{
+						std::cerr << "Producto inválido\n";
+						exit(EXIT_FAILURE);
+					}
+
+					// Por default la cantidad es 1
+					if(optargarg == NULL)
+						cantidad = 1;
+					else
+						cantidad = atoi(optargarg);
+
+					order[prod] += cantidad;
+				}
+				break;
+			}
+			case 'b':
+				bicycle = true;
+				truck   = false;
+				break;
+			case 'T':
+				truck   = true;
+				bicycle = false;
+				break;
+			case 'u':
+				user.emplace(optarg);
+				break;
 			case '?':
 				std::cerr << "no\n";
 				exit(EXIT_FAILURE);
@@ -78,9 +145,6 @@ bool aru::ArgParser::parse(int argc, char* argv[])
 	{
 		std::cerr << argv[optind++] << '\n';
 	}
-
-	//int i = '?';
-	//std::cerr << i;
 
 	return true;
 }
