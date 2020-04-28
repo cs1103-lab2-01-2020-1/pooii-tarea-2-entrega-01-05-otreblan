@@ -14,25 +14,28 @@
 // You should have received a copy of the GNU General Public License
 // along with tarea-3.  If not, see <http://www.gnu.org/licenses/>.
 
-#include <iostream>
-#include <argParser.hpp>
+#pragma once
 
-int main(int argc, char* argv[])
+namespace aru
 {
-	aru::ArgParser parser;
 
-	parser.parse(argc, argv);
+// Lista de productos
+enum class productos
+{
+	pan = 0,
+	carne
+};
 
-	if(argc == 1 || parser.help)
-	{
-		parser.usage();
-		return EXIT_SUCCESS;
-	}
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wc99-designator"
+#pragma GCC diagnostic ignored "-Wunused-variable"
 
-	for(auto [a, b]: parser.order)
-	{
-		std::cout << (int)a << ' ' << b << '\n';
-	}
+static char* const productVector[] =
+{
+	[(int)productos::pan] = (char*)"pan",
+	[(int)productos::carne] = (char*)"carne",
+	0
+};
 
-	return EXIT_SUCCESS;
+#pragma GCC diagnostic pop
 }

@@ -15,6 +15,8 @@
 // along with tarea-3.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <argParser.hpp>
+#include <products.hpp>
+
 #include <string>
 #include <iostream>
 
@@ -24,6 +26,7 @@ const std::vector<option> aru::ArgParser::options =
 	{"track", required_argument, nullptr, 't'},
 	{"list", no_argument, nullptr, 'l'},
 	{"destiny", required_argument, nullptr, 'd'},
+	{"order", required_argument, nullptr, 'o'},
 	{nullptr, 0, nullptr, 0}
 };
 
@@ -36,6 +39,15 @@ void aru::ArgParser::usage()
 		"\t-t, --track=USER           Trackea las órdenes de un usuario\n"
 		"\t-l, --list                 Muestra las órdenes\n"
 		"\t-d, --destination=DESTINO  Destino de la orden\n"
+		"\t-o, --order=LISTA          Lista de productos separada por comas\n"
+		"\n"
+		"Lista de productos disponibles (En --orden deben ir en minúsculas):\n"
+		"\tPan\n"
+		"\tCarne\n"
+		"Ejemplo:\n"
+		"\ttarea-3 -o pan,pan=100,carne=2\n"
+		"La cantidad de productos se suma, por lo en este ejemplo la orden sería\n"
+		"de 101 panes y 2 carnes.\n"
 	;
 }
 
@@ -44,6 +56,8 @@ aru::ArgParser::~ArgParser(){};
 
 bool aru::ArgParser::parse(int argc, char* argv[])
 {
+	using aru::productos;
+
 	// No errors from getopt
 	opterr = 0;
 
@@ -52,8 +66,9 @@ bool aru::ArgParser::parse(int argc, char* argv[])
 		int cc;
 		int option_index;
 
+
 		// Parsing
-		cc = getopt_long(argc, argv, "ht:ld:", options.data(), &option_index);
+		cc = getopt_long(argc, argv, "ht:ld:o:", options.data(), &option_index);
 
 		if(cc == -1)
 			break;
@@ -72,6 +87,31 @@ bool aru::ArgParser::parse(int argc, char* argv[])
 			case 'd':
 				destination.emplace(optarg);
 				break;
+			case 'o':
+			{
+				char* optargarg;
+				int cantidad = 0;
+				productos prod;
+				while(*optarg != '\0')
+				{
+					prod = (productos)getsubopt(&optarg, productVector, &optargarg);
+
+					if((int)prod == -1)
+					{
+						std::cerr << "Producto inválido\n";
+						exit(EXIT_FAILURE);
+					}
+
+					// Por default la cantidad es 1
+					if(optargarg == NULL)
+						cantidad = 1;
+					else
+						cantidad = atoi(optargarg);
+
+					order[prod] += cantidad;
+				}
+				break;
+			}
 			case '?':
 				std::cerr << "no\n";
 				exit(EXIT_FAILURE);

@@ -16,10 +16,12 @@
 
 #pragma once
 
+#include <products.hpp>
+
 #include <getopt.h>
 #include <vector>
-
 #include <optional>
+#include <map>
 
 namespace aru
 {
@@ -47,6 +49,9 @@ public:
 
 	// Destino de la orden
 	std::optional<std::string> destination;
+
+	// Cantidad de productos en la orden
+	std::map<aru::productos, int> order;
 };
 
 }
