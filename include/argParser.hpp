@@ -58,7 +58,7 @@ public:
 	std::optional<std::string> destination;
 
 	// Cantidad de productos en la orden
-	std::map<aru::productos, int> order;
+	std::map<aru::Products, int> order;
 
 	// El vehículo en el que se llevará la orden
 	std::optional<Vehicle> vehicle;

@@ -18,19 +18,28 @@
 
 #include <argParser.hpp>
 
+#include <filesystem>
+
+
 namespace aru
 {
+
+namespace fs = std::filesystem;
 
 class System
 {
 private:
 	ArgParser& args;
 
+	fs::path cache_dir;
+	fs::path bicycle;
+	fs::path truck;
+
 	bool track(const std::string& user);
 	bool order(const std::string& user,
 		const std::string& destination,
-		const std::map<aru::productos, int>& order,
-		const Vehicle vehicle);
+		const Vehicle vehicle,
+		const std::map<aru::Products, int>& order);
 	bool list();
 public:
 	System(ArgParser& args);

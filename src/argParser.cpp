@@ -66,7 +66,7 @@ aru::ArgParser::~ArgParser(){};
 
 bool aru::ArgParser::parse(int argc, char* argv[])
 {
-	using aru::productos;
+	using aru::Products;
 
 	// No errors from getopt
 	opterr = 0;
@@ -103,10 +103,10 @@ bool aru::ArgParser::parse(int argc, char* argv[])
 				action = Action::order;
 				char* optargarg;
 				int cantidad = 0;
-				productos prod;
+				Products prod;
 				while(*optarg != '\0')
 				{
-					prod = (productos)getsubopt(&optarg, productVector, &optargarg);
+					prod = (Products)getsubopt(&optarg, productVector, &optargarg);
 
 					if((int)prod == -1)
 					{

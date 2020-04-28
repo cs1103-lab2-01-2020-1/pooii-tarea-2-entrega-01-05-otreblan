@@ -16,26 +16,21 @@
 
 #pragma once
 
+#include <argParser.hpp>
+
 namespace aru
 {
 
-// Lista de productos
-enum class Products
+struct Order
 {
-	pan = 0,
-	carne
+	time_t time;
+	std::string user;
+	std::string destination;
+	Vehicle vehicle;
+	std::map<aru::Products, int> products;
+
+	friend std::ostream& operator <<(std::ostream& os, const Order& order);
+	friend std::istream& operator >>(std::istream& is, Order& order);
 };
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wc99-designator"
-#pragma GCC diagnostic ignored "-Wunused-variable"
-
-static char* const productVector[] =
-{
-	[(int)Products::pan] = (char*)"pan",
-	[(int)Products::carne] = (char*)"carne",
-	0
-};
-
-#pragma GCC diagnostic pop
 }
