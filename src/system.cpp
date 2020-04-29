@@ -26,7 +26,9 @@
 
 const time_t aru::System::bicycle_time = bicycle_mins*60;
 const time_t aru::System::truck_time = truck_mins*60;
-bool aru::System::sigint;
+
+bool aru::System::sigint = false;
+bool aru::System::winch = false;
 
 aru::System::System(ArgParser& args):
 	args(args)
@@ -141,10 +143,17 @@ bool aru::System::track(const std::string& user)
 		if(sigint)
 			break;
 
-		std::flush(std::cout);
-
 		sleep_for(milliseconds(200));
+
 		std::cout << "\033[" << lines_print << 'A';
+		if(winch)
+		{
+			winch = false;
+
+			// Borra hasta el final
+			std::cout << "\033[0J";
+		}
+		std::flush(std::cout);
 	}
 
 
@@ -382,6 +391,5 @@ void aru::System::update_size(int)
 {
 	ioctl(0, TIOCGWINSZ, &size);
 
-	// Borra hasta el final
-	std::cout << "\033[0J";
+	winch = true;
 }

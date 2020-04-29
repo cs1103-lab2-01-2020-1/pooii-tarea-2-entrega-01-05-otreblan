@@ -36,6 +36,9 @@ private:
 	// Es true cuando SIGINT es recibido
 	static bool sigint;
 
+	// Es true cuando WINCH es recibido
+	static bool winch;
+
 	// Argumentos recibidos por tarea-3
 	ArgParser& args;
 
