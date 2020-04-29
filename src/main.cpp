@@ -63,7 +63,7 @@ int main(int argc, char* argv[])
 	if(argc == 1)
 	{
 		parser.usage();
-		return EXIT_SUCCESS;
+		return EXIT_FAILURE;
 	}
 
 	aru::System system(parser);
