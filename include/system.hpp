@@ -21,26 +21,31 @@
 
 #include <filesystem>
 #include <deque>
+#include <sys/ioctl.h>
 
 namespace aru
 {
 
 namespace fs = std::filesystem;
 
+
 class System
 {
 private:
-	// Tiempo que demora la bicicleta en completar una orden
-	static const time_t bicycle_time;
 
-	// Tiempo que demora el camión en completar una orden
-	static const time_t truck_time;
+	// Es true cuando SIGINT es recibido
+	static bool sigint;
 
+	// Argumentos recibidos por tarea-3
 	ArgParser& args;
 
 	fs::path cache_dir;
 	fs::path bicycle;
 	fs::path truck;
+
+	// Las dimensiones de la terminal
+	static winsize size;
+	static void update_size(int sig = 0);
 
 	bool track(const std::string& user);
 	std::deque<Order> parse_list(fs::path vehicle);
@@ -56,6 +61,12 @@ private:
 	bool list_print(std::ifstream& os, const std::string& vehicle);
 
 public:
+	// Tiempo que demora la bicicleta en completar una orden
+	static const time_t bicycle_time;
+
+	// Tiempo que demora el camión en completar una orden
+	static const time_t truck_time;
+
 	System(ArgParser& args);
 	virtual ~System();
 

@@ -16,10 +16,14 @@
 
 #include <order.hpp>
 #include <products.hpp>
+#include <system.hpp>
 
 #include <iostream>
 #include <sstream>
-#include <stdlib.h>
+#include <cstdlib>
+#include <cstring>
+#include <ctime>
+#include <string>
 
 std::ostream& aru::operator <<(std::ostream& os, const aru::Order& order)
 {
@@ -147,5 +151,62 @@ bool aru::Order::fancy_print(std::ostream& os) const
 
 	os << '\n';
 
+	return true;
+}
+
+bool aru::Order::bar_print(std::ostream& os, winsize size, int index)
+{
+	if(index == 0) // Siendo entregado por el vehículo
+	{
+		time_t now = std::time(NULL);
+		time_t vehicle_time;
+		switch (vehicle)
+		{
+			case Vehicle::bicycle:
+				vehicle_time = System::bicycle_time;
+				break;
+			case Vehicle::truck:
+				vehicle_time = System::truck_time;
+				break;
+		}
+		time_t arrival_time = exit_time.value() + vehicle_time;
+
+		const std::string prefix = "Tiempo de salida: ";
+		std::string time_str = ctime(&exit_time.value());
+		time_str.resize(time_str.size()-1);
+
+		os
+			<< "\033[1;33m"
+			<< prefix
+			<< "\033[0m"
+			<< time_str
+			<< ' ';
+
+		int lenght = prefix.size() + time_str.size() + 1;
+		double progress = (1.0*now-*exit_time)/(arrival_time-*exit_time);
+
+		os << "\033[1;37m";
+		for(int i = lenght; i < size.ws_col; ++i)
+		{
+			os << (i-lenght < progress*(size.ws_col-lenght)?'#':'=');
+		}
+		os << "\033[0m";
+	}
+	else
+	{
+		const std::string puesto = "Puesto: ";
+		const std::string num = std::to_string(index+1);
+
+		os
+			<< "\033[1;33m"
+			<< puesto
+			<< "\033[0m"
+			<< num;
+
+		int lenght = puesto.size() + num.size();
+		for(int i = lenght; i < size.ws_col; ++i)
+			os << ' ';
+	}
+	os << '\n';
 	return true;
 }
