@@ -20,9 +20,13 @@
 #include <iostream>
 #include <fstream>
 #include <deque>
+#include <csignal>
+#include <chrono>
+#include <thread>
 
 const time_t aru::System::bicycle_time = bicycle_mins*60;
 const time_t aru::System::truck_time = truck_mins*60;
+bool aru::System::sigint;
 
 aru::System::System(ArgParser& args):
 	args(args)
@@ -47,37 +51,102 @@ aru::System::System(ArgParser& args):
 
 	truck = cache_dir;
 	truck.append("truck.tsv");
+
+	update_size();
+
+	struct sigaction sa;
+
+	sa.sa_handler = update_size;
+	sa.sa_flags = SA_RESTART;
+
+	if(sigaction(SIGWINCH, &sa, NULL) == -1)
+	{
+		std::cerr << "Sigaction :(\n";
+		exit(EXIT_FAILURE);
+	}
 };
 
-aru::System::~System(){};
+aru::System::~System()
+{
+	struct sigaction sa;
+
+	sa.sa_handler = SIG_DFL;
+	if(sigaction(SIGWINCH, &sa, NULL) == -1)
+	{
+		std::cerr << "Sigaction :(\n";
+		exit(EXIT_FAILURE);
+	}
+}
 
 bool aru::System::track(const std::string& user)
 {
+	using std::this_thread::sleep_for;
+	using std::chrono::milliseconds;
+
 	std::deque<Order> truck_orders = parse_list(truck);
 	std::deque<Order> bicycle_orders = parse_list(bicycle);
 
-	recalculate_orders(truck_orders, Vehicle::truck);
-	recalculate_orders(bicycle_orders, Vehicle::bicycle);
+	struct sigaction sa;
 
-	if(!truck_orders.empty())
-	{
-		std::cout << "Camión\n";
-		for(const auto& i: truck_orders)
+	sa.sa_handler =
+		[](int)
 		{
-			if(i.user == user)
-				i.fancy_print(std::cout);
-		}
+			sigint = true;
+		};
+
+	if(sigaction(SIGINT, &sa, NULL) == -1)
+	{
+		std::cerr << "Sigaction :(\n";
+		exit(EXIT_FAILURE);
 	}
 
-	if(!bicycle_orders.empty())
+	while(true)
 	{
-		std::cout << "Bicicleta\n";
-		for(const auto& i: bicycle_orders)
+		recalculate_orders(truck_orders, Vehicle::truck);
+		recalculate_orders(bicycle_orders, Vehicle::bicycle);
+
+		if(truck_orders.empty() && bicycle_orders.empty())
+			break;
+
+		// Cantidad de línes impresas
+		int lines_print = 0;
+
+
+		for(size_t i = 0; i < truck_orders.size(); ++i)
 		{
-			if(i.user == user)
-				i.fancy_print(std::cout);
+			if(truck_orders[i].user == user)
+			{
+				std::cout << "Camión\n";
+				truck_orders[i].bar_print(std::cout, size, i);
+				std::cout << '\n';
+
+				lines_print += 3;
+				break;
+			}
 		}
+
+		for(size_t i = 0; i < bicycle_orders.size(); ++i)
+		{
+			if(bicycle_orders[i].user == user)
+			{
+				std::cout << "Bicicleta\n";
+				bicycle_orders[i].bar_print(std::cout, size, i);
+
+				lines_print += 2;
+				break;
+			}
+		}
+
+		// Ctrl C
+		if(sigint)
+			break;
+
+		std::flush(std::cout);
+
+		sleep_for(milliseconds(200));
+		std::cout << "\033[" << lines_print << 'A';
 	}
+
 
 	re_order(truck_orders, Vehicle::truck);
 	re_order(bicycle_orders, Vehicle::bicycle);
@@ -305,4 +374,14 @@ bool aru::System::start()
 		exit(EXIT_FAILURE);
 	}
 	return true;
+}
+
+winsize aru::System::size = {};
+
+void aru::System::update_size(int)
+{
+	ioctl(0, TIOCGWINSZ, &size);
+
+	// Borra hasta el final
+	std::cout << "\033[0J";
 }

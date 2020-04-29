@@ -19,6 +19,7 @@
 #include <argParser.hpp>
 
 #include <optional>
+#include <sys/ioctl.h>
 
 namespace aru
 {
@@ -42,6 +43,9 @@ struct Order
 	friend std::istream& operator >>(std::istream& is, Order& order);
 
 	bool fancy_print(std::ostream& os) const;
+
+	/// Loading bar
+	bool bar_print(std::ostream& os, winsize size, int index);
 };
 
 }
