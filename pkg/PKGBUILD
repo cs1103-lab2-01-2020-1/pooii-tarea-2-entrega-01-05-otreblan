@@ -1,7 +1,7 @@
 # Maintainer: Otreblan <otreblain@gmail.com>
 
 pkgname=tarea-3-git
-pkgver=v1.1.0.r0.g7c3c246
+pkgver=v1.2.0.r0.g0c27905
 pkgrel=1
 epoch=
 pkgdesc="Tarea 3"

@@ -22,6 +22,7 @@
 #include <vector>
 #include <optional>
 #include <map>
+#include <string>
 
 namespace aru
 {

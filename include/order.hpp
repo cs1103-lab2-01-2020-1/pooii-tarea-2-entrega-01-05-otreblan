@@ -19,6 +19,7 @@
 #include <argParser.hpp>
 
 #include <optional>
+#include <iostream>
 #include <sys/ioctl.h>
 
 namespace aru
